@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blueprint-plotter"
+version = "0.1.0"
+description = "Turn STL/STEP models into multi-view blueprint sheets for pen plotters (AxiDraw A3)"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "trimesh",
+    "vpype>=1.14",
+    "Hershey-Fonts",
+    "numba",
+]
+
+[project.optional-dependencies]
+web  = ["fastapi", "uvicorn", "python-multipart"]
+step = ["cascadio"]          # lets trimesh read .step/.stp
+plot = ["pyaxidraw"]         # AxiDraw control (see README; may need Evil Mad Scientist's zip)
+dev  = ["pytest", "cairosvg", "httpx"]
+
+[project.scripts]
+blueprint = "blueprint.cli:main"
+
+[tool.setuptools]
+packages = ["blueprint"]
+
+[tool.setuptools.package-data]
+blueprint = ["web/static/*", "web/static/assets/*", "web/samples/*.stl"]

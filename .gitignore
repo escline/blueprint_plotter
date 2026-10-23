@@ -1,0 +1,11 @@
+node_modules/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+dist/
+build/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
