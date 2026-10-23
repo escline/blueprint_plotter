@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
+import mimetypes
 import re
 import tempfile
 import threading
@@ -33,6 +34,12 @@ from .hlr import ViewLines, compute_view
 from .loader import load_raw, orient
 from .output import build_document, merge_segments, stats_dict, svg_string
 from .sheet import PAGES, SheetConfig, compose, draw_view, frame_lines, parse_page, parse_scale, plan_layout, scale_label
+
+# Python's mimetypes reads the Windows registry, where other software often maps .js to
+# text/plain. Browsers refuse to run a module script served that way, so the UI goes blank.
+for _ext, _type in {".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css",
+                    ".svg": "image/svg+xml", ".woff2": "font/woff2", ".woff": "font/woff"}.items():
+    mimetypes.add_type(_type, _ext)
 
 WEB_DIR = Path(__file__).parent / "web"
 STATIC_DIR = WEB_DIR / "static"

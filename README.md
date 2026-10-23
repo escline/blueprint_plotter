@@ -16,6 +16,16 @@ pip install -e ".[web]"      # the browser UI (FastAPI + uvicorn)
 pip install -e ".[step]"     # optional: read .step/.stp via cascadio
 ```
 
+### Windows notes
+
+Use the python.org CPython (`py -3.10`), not an MSYS/MinGW Python: numpy and numba have no wheels for MSYS. 3.10 is also where the NextDraw installer puts its library.
+
+```powershell
+py -3.10 -m venv .venv
+.venv\Scripts\python -m pip install -e ".[web,dev,step]"
+.venv\Scripts\Activate.ps1      # if blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
 AxiDraw control is separate. Install Bantam Tools' NextDraw CLI/API (https://bantam.tools/nd_cli/), then check `nextdraw --version`. The older `axicli` also works; `blueprint plot` uses whichever it finds, preferring `nextdraw`. When calling `nextdraw` directly, always pass `--model 2` (A3; it defaults to a NextDraw model) and `--penlift 3` if your AxiDraw has the brushless pen-lift servo. Without the right pen-lift code the plot runs with the pen up.
 
 ## Use

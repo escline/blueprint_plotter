@@ -86,3 +86,22 @@ def test_bad_requests(model, patch, code):
 def test_upload_rejects_bad_type_and_garbage():
     assert client.post("/api/models", files={"file": ("x.exe", b"MZ")}).status_code == 400
     assert client.post("/api/models", files={"file": ("x.stl", b"not a mesh")}).status_code == 400
+
+
+def test_ui_assets_have_browser_runnable_types():
+    # Windows registries often map .js to text/plain; browsers then refuse the module script
+    # and the UI renders as a blank page.
+    import re
+
+    index = client.get("/")
+    assert index.status_code == 200
+    assets = re.findall(r'(?:src|href)="(/assets/[^"]+)"', index.text)
+    assert any(a.endswith(".js") for a in assets)
+    for path in assets:
+        r = client.get(path)
+        assert r.status_code == 200, path
+        ctype = r.headers["content-type"]
+        if path.endswith(".js"):
+            assert ctype.startswith("text/javascript"), (path, ctype)
+        elif path.endswith(".css"):
+            assert ctype.startswith("text/css"), (path, ctype)

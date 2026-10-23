@@ -28,6 +28,12 @@ body,
   margin: 0;
 }
 
+/* Full-window app: only the sidebar scrolls, never the page itself. */
+html,
+body {
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font);
   font-size: 14px;
@@ -44,6 +50,9 @@ body {
   position: absolute;
   width: 1px;
   height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
@@ -101,7 +110,10 @@ body {
 
 .sidebar {
   grid-row: 2;
+  /* positioned so absolute children (.sr-only labels) scroll with it, not with the page */
+  position: relative;
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--chrome);
   border-right: 1px solid var(--rule);
 }
