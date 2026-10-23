@@ -16,7 +16,7 @@ pip install -e ".[web]"      # the browser UI (FastAPI + uvicorn)
 pip install -e ".[step]"     # optional: read .step/.stp via cascadio
 ```
 
-AxiDraw control is separate. Install Bantam Tools' NextDraw CLI/API (https://bantam.tools/nd_cli/), then check `nextdraw --version`. The older `axicli` also works; `blueprint plot` uses whichever it finds, preferring `nextdraw`. Always pass `--model 2` (A3) when calling `nextdraw` directly, because it defaults to a NextDraw model.
+AxiDraw control is separate. Install Bantam Tools' NextDraw CLI/API (https://bantam.tools/nd_cli/), then check `nextdraw --version`. The older `axicli` also works; `blueprint plot` uses whichever it finds, preferring `nextdraw`. When calling `nextdraw` directly, always pass `--model 2` (A3; it defaults to a NextDraw model) and `--penlift 3` if your AxiDraw has the brushless pen-lift servo. Without the right pen-lift code the plot runs with the pen up.
 
 ## Use
 
@@ -76,7 +76,7 @@ Layout is computed client-side: the server returns each view's geometry relative
 | 3 | dimensions, text, border, title block | thin pen |
 
 ```bash
-nextdraw part.svg --model 2 --mode layers --layer 1  # swap pen, then --layer 2, --layer 3
+nextdraw part.svg --model 2 --penlift 3 --mode layers --layer 1  # swap pen, then --layer 2, --layer 3
 # or:   blueprint plot part.svg --layer 1
 ```
 
@@ -85,7 +85,7 @@ Line weight is simulated by pen choice per layer; a pen plotter has no variable 
 ## Plotting notes (AxiDraw A3)
 
 * Default border sits 10 mm inside A3 (420×297). The A3 travel area is slightly larger than the sheet, so keep the paper registered to the home corner and use `--margin` if your pen drifts at the edges.
-* `blueprint plot` just shells out to `nextdraw` (or `axicli`). It has passed `--preview` runs but **has not been exercised against hardware yet**. Use `--preview` for the time estimate, then plot layer 1 first.
+* `blueprint plot` just shells out to `nextdraw` (or `axicli`). It defaults to `--model 2 --penlift 3` (A3, brushless pen lift); use `--penlift 1` for a standard servo. Tested on an A3: use `--preview` for the time estimate, then plot each layer with a pen swap in between.
 
 ## How the hidden-line removal works (mesh-based)
 

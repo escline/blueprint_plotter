@@ -58,6 +58,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("plot", help="send an SVG to the AxiDraw via nextdraw (or axicli)")
     p.add_argument("svg")
     p.add_argument("--model", type=int, default=2, help="AxiDraw model (2 = A3, default)")
+    p.add_argument("--penlift", type=int, default=3, help="pen-lift motor: 3 = brushless servo (default), 1 = standard servo")
     p.add_argument("--layer", type=int, help="plot only this layer/pen (1 visible, 2 hidden, 3 notes)")
     p.add_argument("--preview", action="store_true", help="simulate only; print time estimate")
     p.add_argument("--speed-pendown", type=int, help="pen-down speed %% (--speed_pendown)")
@@ -122,7 +123,7 @@ def main(argv: list[str] | None = None) -> None:
         except (ValueError, FileNotFoundError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             sys.exit(2)
-    sys.exit(plot_svg(args.svg, model=args.model, layer=args.layer, preview=args.preview, speed_pendown=args.speed_pendown))
+    sys.exit(plot_svg(args.svg, model=args.model, penlift=args.penlift, layer=args.layer, preview=args.preview, speed_pendown=args.speed_pendown))
 
 
 if __name__ == "__main__":
