@@ -55,12 +55,12 @@ def _build_parser() -> argparse.ArgumentParser:
     w.add_argument("--port", type=int, default=8765)
     w.add_argument("--no-browser", action="store_true", help="don't open a browser tab")
 
-    p = sub.add_parser("plot", help="send an SVG to the AxiDraw via axicli")
+    p = sub.add_parser("plot", help="send an SVG to the AxiDraw via nextdraw (or axicli)")
     p.add_argument("svg")
     p.add_argument("--model", type=int, default=2, help="AxiDraw model (2 = A3, default)")
     p.add_argument("--layer", type=int, help="plot only this layer/pen (1 visible, 2 hidden, 3 notes)")
     p.add_argument("--preview", action="store_true", help="simulate only; print time estimate")
-    p.add_argument("--speed-pendown", type=int, help="pen-down speed %% (axicli --speed_pendown)")
+    p.add_argument("--speed-pendown", type=int, help="pen-down speed %% (--speed_pendown)")
     return ap
 
 

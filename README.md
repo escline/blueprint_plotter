@@ -4,7 +4,7 @@ Turn a 3D model (STL/OBJ/PLY/3MF, or STEP) into a multi-view **blueprint sheet**
 
 ```
 model → project (front/top/right/iso…) → hidden-line removal → sheet layout + dims + title block
-      → vpype (merge strokes, simplify, sort for min pen-up travel) → layered SVG → axicli
+      → vpype (merge strokes, simplify, sort for min pen-up travel) → layered SVG → nextdraw
 ```
 
 ## Install
@@ -16,7 +16,7 @@ pip install -e ".[web]"      # the browser UI (FastAPI + uvicorn)
 pip install -e ".[step]"     # optional: read .step/.stp via cascadio
 ```
 
-AxiDraw control is separate (`axicli`). Follow Evil Mad Scientist's Python API install notes, then check `axicli --version`.
+AxiDraw control is separate. Install Bantam Tools' NextDraw CLI/API (https://bantam.tools/nd_cli/), then check `nextdraw --version`. The older `axicli` also works; `blueprint plot` uses whichever it finds, preferring `nextdraw`. Always pass `--model 2` (A3) when calling `nextdraw` directly, because it defaults to a NextDraw model.
 
 ## Use
 
@@ -76,7 +76,7 @@ Layout is computed client-side: the server returns each view's geometry relative
 | 3 | dimensions, text, border, title block | thin pen |
 
 ```bash
-axicli part.svg --model 2 --mode layers --layer 1     # swap pen, then --layer 2, --layer 3
+nextdraw part.svg --model 2 --mode layers --layer 1  # swap pen, then --layer 2, --layer 3
 # or:   blueprint plot part.svg --layer 1
 ```
 
@@ -85,7 +85,7 @@ Line weight is simulated by pen choice per layer; a pen plotter has no variable 
 ## Plotting notes (AxiDraw A3)
 
 * Default border sits 10 mm inside A3 (420×297). The A3 travel area is slightly larger than the sheet, so keep the paper registered to the home corner and use `--margin` if your pen drifts at the edges.
-* `blueprint plot` just shells out to `axicli` and **has not been exercised against hardware yet**. Use `--preview` for the time estimate, then plot layer 1 first.
+* `blueprint plot` just shells out to `nextdraw` (or `axicli`). It has passed `--preview` runs but **has not been exercised against hardware yet**. Use `--preview` for the time estimate, then plot layer 1 first.
 
 ## How the hidden-line removal works (mesh-based)
 
